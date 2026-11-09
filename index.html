@@ -1,401 +1,603 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>RAHMANI-XMD BOT | WhatsApp Pairing</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Fonts for diversity -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@900&family=Share+Tech+Mono&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>RAHMANI-XMD | Dashboard</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
   <style>
-    html, body {
-      height: 100%;
+    :root {
+      --card-bg: rgba(20, 20, 20, 0.75);
+      --text-main: #ffffff;
+      --text-muted: #a1a1aa;
+      --border: rgba(255, 255, 255, 0.1);
+      --gold: #ffd200;
+      --orange: #f7971e;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      overflow-x: hidden;
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
+
+    /* --- Original Animated Gradient Background --- */
     body {
-      min-height: 100vh;
-      box-sizing: border-box;
-      /* Live background: animated gradient */
       background: linear-gradient(-45deg, #232526, #1e3c72, #2a5298, #0f2027, #f7971e, #ffd200, #f7971e);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
-      color: #fff;
-      font-family: 'Roboto', Arial, sans-serif;
-      transition: background 0.4s;
+      color: var(--text-main);
+      padding-bottom: 100px;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
+
     @keyframes gradientBG {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    .container {
-      max-width: 800px;
-      margin: 60px auto 0 auto;
-      background: rgba(30, 36, 50, 0.7);
-      border-radius: 25px;
-      padding: 40px 32px 20px 32px;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      border: 1px solid rgba(255,255,255,0.12);
-      position: relative;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-      font-family: 'Orbitron', monospace;
-      letter-spacing: 2px;
-    }
-    header h1 {
-      font-size: 2.8rem;
-      font-weight: bold;
-      margin: 0;
-      font-family: 'Share Tech Mono', 'Montserrat', Arial, sans-serif;
-      text-shadow: 0 4px 30px rgba(0,0,0,0.18);
-      letter-spacing: 4px;
-      color: #ffd200;
-    }
-    header h2 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin: 0;
-      margin-top: 8px;
-      color: #fff;
-      font-family: 'Montserrat', Arial, sans-serif;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    }
-
-    /* Initializing System Loader */
-    .init-loader {
+    /* =========================================
+       LOADER (Picha Inacheza Cheza Nyuma)
+       ========================================= */
+    #loader-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 9999;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: 32px 0 48px 0;
-      min-height: 220px;
       justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      overflow: hidden;
     }
-    .circle-loader {
-      width: 90px;
-      height: 90px;
-      border: 8px solid #ffd200;
-      border-top: 8px solid #1e3c72;
-      border-radius: 50%;
-      animation: spin 1.3s linear infinite;
-      margin-bottom: 20px;
+
+    /* Hapa ndio picha inaelea na kusogea (Pan & Zoom effect) */
+    .loader-bg-image {
+      position: absolute;
+      top: -5%;
+      left: -5%;
+      width: 110%;
+      height: 110%;
+      object-fit: cover;
+      z-index: 1;
+      /* Animation inayofanya picha itembelee pande zote */
+      animation: moveBackground 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes moveBackground {
+      0% { 
+        transform: scale(1) translate(0, 0); 
+      }
+      50% { 
+        transform: scale(1.05) translate(-3%, -2%); 
+      }
+      100% { 
+        transform: scale(1.1) translate(3%, 2%); 
+      }
+    }
+
+    /* Giza kidogo ili spinner na maandishi vionekane vizuri */
+    #loader-screen::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.55); /* Giza laini */
+      z-index: 2;
+    }
+
+    #loader-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-content {
       position: relative;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
-    .loader-text {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: #ffd200;
-      height: 1.5em;
-      text-align: center;
-      letter-spacing: 1.2px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.12);
-    }
-
-    /* Hide actual content until loader is gone */
-    .site-content {
-      display: none;
-      animation: fadeIn 1.2s;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0;}
-      to { opacity: 1;}
-    }
-
-    /* Button grid */
-    .btn-grid {
+      z-index: 3;
       display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      margin: 36px 0 24px 0;
-    }
-    .btn {
-      min-width: 160px;
-      padding: 14px 24px;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-weight: 700;
-      border: none;
-      border-radius: 50px;
-      background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
-      color: #2a2a2a;
-      font-size: 1.14rem;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.18s;
-      box-shadow: 0 3px 12px rgba(255, 210, 0, 0.12);
-      margin: 0;
-      outline: none;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-    .btn:hover {
-      transform: translateY(-4px) scale(1.06);
-      box-shadow: 0 8px 30px 0 rgba(255, 210, 0, 0.38);
     }
 
-    .info-bar {
+    .spinner {
+      width: 80px;
+      height: 80px;
+      border: 6px solid rgba(255, 210, 0, 0.2);
+      border-top: 6px solid var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(255, 210, 0, 0.3);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loader-text {
       font-family: 'Share Tech Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-align: center;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+      font-weight: bold;
+    }
+
+    /* =========================================
+       SITE CONTENT
+       ========================================= */
+    #site-content {
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #site-content.visible {
+      opacity: 1;
+    }
+
+    .top-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 16px 20px;
+    }
+
+    .profile-wrapper {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      box-shadow: 0 0 20px rgba(255, 210, 0, 0.4);
+      margin-bottom: 12px;
+    }
+
+    .rotating-profile {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #0f2027;
+      animation: rotateProfile 8s linear infinite;
+    }
+
+    @keyframes rotateProfile {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .brand-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-container {
+      padding: 0 16px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+
+    .search-box i {
+      color: var(--text-muted);
+      margin-right: 10px;
+      font-size: 1.1rem;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 1rem;
+      color: var(--text-main);
+      background: transparent;
+    }
+    .search-box input::placeholder { color: var(--text-muted); }
+
+    .main-content {
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .detailed-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: transform 0.2s, box-shadow 0.2s;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .detailed-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(255, 210, 0, 0.15);
+      border-color: rgba(255, 210, 0, 0.4);
+    }
+
+    .btn-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      background: #222;
+      overflow: hidden;
+    }
+
+    .btn-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .detailed-btn:hover .btn-image-wrapper img {
+      transform: scale(1.05);
+    }
+
+    .image-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      color: var(--gold);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(255,210,0,0.3);
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-content {
+      padding: 20px;
+    }
+
+    .btn-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 1.08rem;
-      background: rgba(0,0,0,0.30);
-      border-radius: 18px;
-      padding: 11px 18px;
-      margin-bottom: 16px;
-      color: #ffd200;
-      font-weight: bold;
-      letter-spacing: 1px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      align-items: flex-start;
+      margin-bottom: 8px;
     }
 
-    .quotes-bar {
-      text-align: center;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-size: 1.2rem;
-      font-style: italic;
-      color: #fff;
-      margin: 20px 0 0 0;
-      min-height: 2.5em;
-      font-weight: 700;
+    .btn-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
-      text-shadow: 0 4px 16px rgba(255,255,255,0.09);
-      transition: color 0.18s;
+      color: var(--gold);
     }
 
-    .footer {
-      text-align: center;
-      margin-top: 30px;
-      color: #ffd200;
-      font-family: 'Roboto', sans-serif;
-      font-size: 1.07rem;
-      opacity: 0.88;
-      letter-spacing: 1px;
+    .btn-icon-right {
+      color: var(--text-muted);
+      font-size: 1rem;
+      transition: color 0.2s;
     }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      .container {
-        max-width: 98vw;
-        padding: 14px 2vw;
-      }
-      .btn-grid {
-        gap: 8px;
-      }
+    .detailed-btn:hover .btn-icon-right {
+      color: var(--gold);
     }
+
+    .btn-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .btn-description {
+      font-size: 0.9rem;
+      color: #d4d4d8;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      background: rgba(255, 210, 0, 0.1);
+      border: 1px solid rgba(255, 210, 0, 0.2);
+      color: var(--gold);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(15, 15, 15, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 8px;
+      z-index: 20;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-item.active {
+      background: rgba(255, 210, 0, 0.15);
+      color: var(--gold);
+    }
+
+    .nav-item:hover {
+      color: var(--gold);
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+    }
+
     @media (max-width: 550px) {
-      .container {
-        padding: 5vw 1vw;
-        margin: 12px 2vw;
-      }
-      .btn {
-        font-size: 1rem;
-        min-width: 120px;
-        padding: 10px 8px;
-      }
-      header h1 {
-        font-size: 2rem;
-      }
-      .footer {
-        font-size: 1rem;
-      }
-      .info-bar {
-        font-size: 0.89rem;
-        flex-direction: column;
-        gap: 4px;
-        padding: 7px 7px;
-      }
+      .btn-image-wrapper { height: 180px; }
+      .profile-wrapper { width: 70px; height: 70px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>RAHMANI-XMD BOT</h1>
-      <h2>WhatsApp Bot Pairing & Control Center</h2>
-    </header>
-    <!-- Loader -->
-    <div class="init-loader" id="init-loader">
-      <div class="circle-loader"></div>
-      <div class="loader-text" id="loader-text">Initializing...</div>
-    </div>
-    <!-- Actual site content -->
-    <div class="site-content" id="site-content">
-      <div class="info-bar">
-        <span id="time"></span>
-        <span id="battery">Battery: <span id="battery-level">Detecting...</span></span>
-      </div>
 
-      <div class="quotes-bar" id="quote-bar">
-        <!-- Random quote will appear here -->
-      </div>
-
-      <div class="btn-grid">
-        <a class="btn" href="https://github.com/Qartde" target="_blank" title="Follow me on GitHub!">⭐ Follow on GitHub</a>
-        <a class="btn" href="https://github.com/Qartde/RAHMANI-XMD" target="_blank" title="Fork RAHMANI-XMD bot!">🍴 Fork RAHMANI-XMD</a>
-        <a class="btn" href="https://heroku.com/deploy?template=https://github.com/Qartde/RAHMANI-XMD" target="_blank" title="Deploy to Heroku">🚀 Deploy on Heroku</a>
-        <a class="btn" href="https://whatsapp.com/channel/0029VatokI45EjxufALmY32X" target="_blank" title="Follow WhatsApp Channel!">💬 WhatsApp Channel</a>
-        <a class="btn" href="https://wa.me/255693629079" target="_blank" title="Contact on WhatsApp!">📱 Contact on WhatsApp</a>
-        <a class="btn" href="mailto:rahmanisaidi99@gmail.com?subject=RAHMANI-XMD%20Bot%20Error%20Report" target="_blank" title="Report an Error!">⚠️ Report Error</a>
-        <a class="btn" href="https://rahmani-4.onrender.com" target="_blank" title="Pair your WhatsApp Device">🔗 Pairing Web</a>
-      </div>
-
-      <div class="footer">
-        &copy; <span id="year"></span> RAHMANI-XMD BOT | Built &amp; maintained by <a href="https://github.com/Qartde" style="color:#ffd200; text-decoration:underline;" target="_blank">Qartde</a>
-      </div>
+  <!-- =========================================
+       LOADER SCREEN
+       ========================================= -->
+  <div id="loader-screen">
+    <!-- Picha inayoelea na kusogea (moveBackground) -->
+    <img src="https://files.catbox.moe/aktbgo.jpg" alt="Loading Background" class="loader-bg-image" />
+    
+    <div class="loader-content">
+      <div class="spinner"></div>
+      <div class="loader-text" id="loader-text">Initializing System...</div>
     </div>
   </div>
-  <!-- Skewed animated background FX using canvas (optional, but cool) -->
-  <canvas id="bg-canvas" style="position:fixed;z-index:-1;top:0;left:0;width:100vw;height:100vh;pointer-events:none;"></canvas>
+
+  <!-- =========================================
+       SITE CONTENT
+       ========================================= -->
+  <div id="site-content">
+    
+    <div class="top-header">
+      <div class="profile-wrapper">
+        <img src="https://files.catbox.moe/aktbgo.jpg" alt="Profile" class="rotating-profile" />
+      </div>
+      <div class="brand-title">
+        RAHMANI-XMD <i class="fa-solid fa-circle-check" style="font-size: 1rem; color: #1d9bf0;"></i>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search bot features, links..." />
+      </div>
+    </div>
+
+    <div class="main-content">
+      
+      <!-- BUTTON 1: PAIRING -->
+      <a href="https://rahmani-xmd-k3nw.onrender.com/pair" target="_blank" class="detailed-btn">
+        <div class="btn-image-wrapper">
+          <img src="https://files.catbox.moe/aktbgo.jpg" alt="RAHMANI-XMD Pairing" />
+          <div class="image-badge">
+            <i class="fa-solid fa-link"></i> PAIR NOW
+          </div>
+        </div>
+        <div class="btn-content">
+          <div class="btn-header">
+            <h2 class="btn-title">Pair Your Device</h2>
+            <i class="fa-solid fa-arrow-up-right-from-square btn-icon-right"></i>
+          </div>
+          <p class="btn-subtitle">[CONNECT] Link your WhatsApp to RAHMANI-XMD</p>
+          <p class="btn-description">
+            Click here to generate your pairing code and connect your WhatsApp number securely. Once paired, you can start using all bot commands immediately.
+          </p>
+          <div class="tags-container">
+            <span class="tag">PAIRING</span>
+            <span class="tag">WHATSAPP</span>
+            <span class="tag">SECURE</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- BUTTON 2: OWNER (Contact) -->
+      <a href="https://wa.me/255693629079" target="_blank" class="detailed-btn">
+        <div class="btn-image-wrapper">
+          <img src="https://files.catbox.moe/aktbgo.jpg" alt="Contact Owner" />
+          <div class="image-badge">
+            <i class="fa-solid fa-crown"></i> OWNER
+          </div>
+        </div>
+        <div class="btn-content">
+          <div class="btn-header">
+            <h2 class="btn-title">Contact Owner</h2>
+            <i class="fa-solid fa-arrow-up-right-from-square btn-icon-right"></i>
+          </div>
+          <p class="btn-subtitle">[SUPPORT] Get in touch with the developer</p>
+          <p class="btn-description">
+            Have a question, need help with deployment, or want to report a bug? Reach out to the owner directly on WhatsApp for fast assistance.
+          </p>
+          <div class="tags-container">
+            <span class="tag">CONTACT</span>
+            <span class="tag">SUPPORT</span>
+            <span class="tag">OWNER</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- BUTTON 3: BOT (GitHub) -->
+      <a href="https://github.com/Qartde/RAHMANI-XMD" target="_blank" class="detailed-btn">
+        <div class="btn-image-wrapper">
+          <img src="https://files.catbox.moe/aktbgo.jpg" alt="Bot Source Code" />
+          <div class="image-badge">
+            <i class="fa-solid fa-code"></i> OPEN SOURCE
+          </div>
+        </div>
+        <div class="btn-content">
+          <div class="btn-header">
+            <h2 class="btn-title">Bot Source Code</h2>
+            <i class="fa-solid fa-arrow-up-right-from-square btn-icon-right"></i>
+          </div>
+          <p class="btn-subtitle">[GITHUB] Fork, Star & Deploy the Bot</p>
+          <p class="btn-description">
+            Access the full source code of RAHMANI-XMD on GitHub. Fork it, star it, and customize it to your liking. Deploy it easily using Heroku or Render.
+          </p>
+          <div class="tags-container">
+            <span class="tag">GITHUB</span>
+            <span class="tag">SOURCE CODE</span>
+            <span class="tag">DEPLOY</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- BUTTON 4: CHANNEL -->
+      <a href="https://whatsapp.com/channel/0029VatokI45EjxufALmY32X" target="_blank" class="detailed-btn">
+        <div class="btn-image-wrapper">
+          <img src="https://files.catbox.moe/aktbgo.jpg" alt="WhatsApp Channel" />
+          <div class="image-badge">
+            <i class="fa-solid fa-bullhorn"></i> UPDATES
+          </div>
+        </div>
+        <div class="btn-content">
+          <div class="btn-header">
+            <h2 class="btn-title">WhatsApp Channel</h2>
+            <i class="fa-solid fa-arrow-up-right-from-square btn-icon-right"></i>
+          </div>
+          <p class="btn-subtitle">[FOLLOW] Stay updated with the latest news</p>
+          <p class="btn-description">
+            Follow our official WhatsApp channel to get updates about new features, bot maintenance, and important announcements from the team.
+          </p>
+          <div class="tags-container">
+            <span class="tag">CHANNEL</span>
+            <span class="tag">UPDATES</span>
+            <span class="tag">NEWS</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active" title="Home">
+      <i class="fa-solid fa-house"></i>
+    </a>
+    <a href="https://whatsapp.com/channel/0029VatokI45EjxufALmY32X" target="_blank" class="nav-item" title="Channel">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+    <div class="nav-divider"></div>
+    <a href="https://github.com/Qartde" target="_blank" class="nav-item" title="GitHub">
+      <i class="fa-brands fa-github"></i>
+    </a>
+    <a href="#" target="_blank" class="nav-item" title="LinkedIn">
+      <i class="fa-brands fa-linkedin"></i>
+    </a>
+    <a href="#" target="_blank" class="nav-item" title="X">
+      <i class="fa-brands fa-x-twitter"></i>
+    </a>
+    <a href="#" target="_blank" class="nav-item" title="YouTube">
+      <i class="fa-brands fa-youtube"></i>
+    </a>
+  </nav>
+
+  <!-- =========================================
+       JAVASCRIPT
+       ========================================= -->
   <script>
-    // Loader "Initializing" animation
     const loaderWords = [
       "Initializing System...",
       "Connecting to WhatsApp...",
       "Fetching AI Modules...",
-      "Hacking Mainframe...",
       "Deploying Neural Networks...",
-      "Pairing Secure Channels...",
-      "Booting Nexus-AI...",
       "Almost Ready...",
       "Welcome!"
     ];
+    
     let loaderIdx = 0;
-    const loader = document.getElementById('init-loader');
+    const loaderScreen = document.getElementById('loader-screen');
     const loaderText = document.getElementById('loader-text');
     const siteContent = document.getElementById('site-content');
 
     function showLoaderWords() {
-      loaderText.textContent = loaderWords[loaderIdx % loaderWords.length];
+      loaderText.textContent = loaderWords[loaderIdx];
       loaderIdx++;
+      
       if (loaderIdx < loaderWords.length) {
-        setTimeout(showLoaderWords, 900);
+        setTimeout(showLoaderWords, 800);
       } else {
         setTimeout(() => {
-          loader.style.display = 'none';
-          siteContent.style.display = 'block';
-        }, 900);
+          loaderScreen.classList.add('hidden');
+          siteContent.classList.add('visible');
+        }, 800);
       }
     }
+
     showLoaderWords();
-
-    // Time and Date
-    function updateTime() {
-      const now = new Date();
-      const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      let h = now.getHours().toString().padStart(2, '0');
-      let m = now.getMinutes().toString().padStart(2, '0');
-      let s = now.getSeconds().toString().padStart(2, '0');
-      let timeStr = `${h}:${m}:${s}`;
-      let dateStr = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
-      document.getElementById('time').innerHTML = `<b>${dateStr}</b> &bull; <span style="font-family:'Share Tech Mono',monospace;font-weight:700;">${timeStr}</span>`;
-      requestAnimationFrame(updateTime);
-    }
-    updateTime();
-
-    // Battery Status
-    function updateBatteryStatus(battery) {
-      const percent = Math.round(battery.level * 100);
-      document.getElementById('battery-level').textContent = percent + '%';
-    }
-    if ('getBattery' in navigator) {
-      navigator.getBattery().then(function(battery) {
-        updateBatteryStatus(battery);
-        battery.addEventListener('levelchange', function() {
-          updateBatteryStatus(battery);
-        });
-      });
-    } else {
-      document.getElementById('battery-level').textContent = "Unavailable";
-    }
-
-    // Quotes
-    const quotes = [
-      "“The best way to predict the future is to invent it.” – Alan Kay",
-      "“Never trust a computer you can’t throw out a window.” – Steve Wozniak",
-      "“Artificial intelligence is the new electricity.” – Andrew Ng",
-      "“Stay hungry, stay foolish.” – Steve Jobs",
-      "“Simplicity is the soul of efficiency.” – Austin Freeman",
-      "“Innovation is the ability to see change as an opportunity – not a threat.” – Steve Jobs",
-      "“Your mind is programmable – if you’re not programming it, someone else will program it for you.”",
-      "“Bots do not sleep, neither does Nexus-AI.”",
-      "“Great things never come from comfort zones.”",
-      "“Code is like humor. When you have to explain it, it’s bad.” – Cory House"
-    ];
-    let quoteIdx = Math.floor(Math.random()*quotes.length);
-    function showQuote() {
-      document.getElementById('quote-bar').textContent = quotes[quoteIdx];
-      quoteIdx = (quoteIdx + 1) % quotes.length;
-      setTimeout(showQuote, 8000 + Math.random()*3000);
-    }
-    showQuote();
-
-    // Year in footer
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Live animated geometric background using canvas
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    let width = window.innerWidth, height = window.innerHeight;
-    function resizeCanvas() {
-      width = window.innerWidth; height = window.innerHeight;
-      canvas.width = width; canvas.height = height;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    let particles = [];
-    function initParticles() {
-      particles = [];
-      for (let i=0; i<66; i++) {
-        particles.push({
-          x: Math.random()*width,
-          y: Math.random()*height,
-          r: 1.6 + Math.random()*2.6,
-          dx: -1.1 + Math.random()*2.2,
-          dy: -1.1 + Math.random()*2.2,
-          alpha: 0.14 + Math.random()*0.22
-        });
-      }
-    }
-    function drawParticles() {
-      ctx.clearRect(0,0,width,height);
-      for (let p of particles) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, 2*Math.PI, false);
-        ctx.fillStyle = `rgba(255,210,0,${p.alpha})`;
-        ctx.shadowColor = '#ffd200';
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        p.x += p.dx; p.y += p.dy;
-        if (p.x<0 || p.x>width) p.dx *= -1;
-        if (p.y<0 || p.y>height) p.dy *= -1;
-      }
-      requestAnimationFrame(drawParticles);
-    }
-    initParticles();
-    drawParticles();
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      initParticles();
-    });
   </script>
 </body>
 </html>
